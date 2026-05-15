@@ -1,0 +1,4 @@
+# No pujar fitxers temporals
+*.tmp
+*.log
+.DS_Store
