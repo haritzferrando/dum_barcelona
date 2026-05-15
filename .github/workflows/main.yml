@@ -1,31 +1,23 @@
-yamlname: Descàrrega diària DUM Barcelona
-
+name: Descarrega DUM Barcelona
 on:
   schedule:
     - cron: '0 8 * * *'
   workflow_dispatch:
-
 jobs:
   download:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Descarregar el repositori
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Descarregar fitxer JSON del portal Open Data BCN
+      - name: Descarregar JSON
         run: |
           DATE=$(date +%Y%m%d)
-          curl -L \
-            -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36" \
-            -o "data/${DATE}_DUM.json" \
-            "https://opendata-ajuntament.barcelona.cat/data/dataset/estacionaments-dum/resource/5c0dd0e5-158c-45e2-bc78-22c32c9ed6b0/download/Estacionaments_Area_DUM.json"
-
-      - name: Desar el fitxer al repositori
+          mkdir -p data
+          curl -L -A "Mozilla/5.0" -o "data/${DATE}_DUM.json" "https://opendata-ajuntament.barcelona.cat/data/dataset/estacionaments-dum/resource/5c0dd0e5-158c-45e2-bc78-22c32c9ed6b0/download/Estacionaments_Area_DUM.json"
+      - name: Guardar fitxer
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p data
           git add data/
-          git diff --cached --quiet || git commit -m "Dades DUM del $(date +%d/%m/%Y)"
+          git diff --cached --quiet || git commit -m "DUM $(date +%d/%m/%Y)"
           git push
