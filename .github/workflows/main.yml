@@ -1,3 +1,4 @@
+yaml
 name: Descarrega DUM Barcelona
 on:
   schedule:
